@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --font-body: 'Outfit', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --ink-900: #0f2436;
+  --ink-700: #274258;
+  --ink-600: #466178;
+  --brand-600: #5ba7cc;
+  --brand-500: #7daecb;
+  --brand-100: #eaf2f8;
+  --accent-sun: #d8b16c;
+  --accent-coral: #c88d73;
+  --accent-mint: #9cc9bb;
+  --accent-lilac: #a9a8c9;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-fast: 180ms;
+  --motion-slow: 320ms;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
