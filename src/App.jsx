@@ -318,7 +318,7 @@ function App() {
           <motion.p className="eyebrow" variants={heroItem}>
             The Best Office and Commercial Cleaning Experts in the Bay Area
           </motion.p>
-          <motion.h1 variants={heroItem}>The Best Cleaning Services Near You In San Francisco</motion.h1>
+          <motion.h1 variants={heroItem}>The Best Cleaning Services Near You In San Francisco & the Bay Area</motion.h1>
           <motion.p className="lead" variants={heroItem}>
             Not your average cleaning service in San Francisco, CA. We make Bay Area spaces shine with reliable teams,
             flexible scheduling, and quality results.
