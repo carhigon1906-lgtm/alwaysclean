@@ -14,8 +14,11 @@
   --accent-mint: #9cc9bb;
   --accent-lilac: #a9a8c9;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.34, 1.56, 0.64, 1);
   --motion-fast: 180ms;
   --motion-slow: 320ms;
+  --motion-fluid: 420ms;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
