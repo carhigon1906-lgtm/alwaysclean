@@ -15,6 +15,7 @@ import './App.css'
 const easing = [0.22, 1, 0.36, 1]
 const springSmooth = { type: 'spring', stiffness: 220, damping: 28, mass: 0.85 }
 const springSnappy = { type: 'spring', stiffness: 320, damping: 24, mass: 0.8 }
+const promoDigitSpring = { type: 'spring', stiffness: 140, damping: 16, mass: 1.04 }
 
 const heroContainer = {
   hidden: {},
@@ -88,6 +89,13 @@ const stats = [
   { k: '4.5+', t: 'Trusted review score' },
   { k: '$2M', t: 'Insurance policy' },
 ]
+
+const promoOffer = {
+  label: 'Special offer',
+  headline: 'Up to 30% off your first service',
+  subline: 'On your first appointment',
+  detail: 'For new clients. Applied automatically.',
+}
 
 const reviews = [
   {
@@ -290,6 +298,8 @@ function App() {
   const [showOtherServicesVideo, setShowOtherServicesVideo] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [topbarScrolled, setTopbarScrolled] = useState(false)
+  const [promoModalOpen, setPromoModalOpen] = useState(true)
+  const [promoStickerVisible, setPromoStickerVisible] = useState(false)
   const menuSheetY = useMotionValue(0)
 
   const { scrollYProgress } = useScroll({
@@ -402,9 +412,140 @@ function App() {
     }
   }, [mobileMenuOpen, menuSheetY])
 
+  useEffect(() => {
+    if (!promoModalOpen) {
+      return
+    }
+
+    const id = window.setTimeout(() => {
+      setPromoModalOpen(false)
+      setPromoStickerVisible(true)
+    }, 5600)
+
+    return () => window.clearTimeout(id)
+  }, [promoModalOpen])
+
+  useEffect(() => {
+    if (!promoModalOpen) {
+      return
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [promoModalOpen])
+
   return (
     <LazyMotion features={domAnimation}>
       <div className="page">
+        <AnimatePresence>
+          {promoModalOpen && (
+            <Motion.aside
+              className="promo-modal-backdrop"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Special offer"
+              onClick={() => {
+                setPromoModalOpen(false)
+                setPromoStickerVisible(true)
+              }}
+              initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+              animate={reduceMotion ? { opacity: 1 } : { opacity: 1 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0 }}
+              transition={reduceMotion ? { duration: 0 } : { duration: 0.2 }}
+            >
+              <Motion.div
+                className="promo-modal-card"
+                onClick={(event) => event.stopPropagation()}
+                initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 18, scale: 0.96 }}
+                animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.98 }}
+                transition={reduceMotion ? { duration: 0 } : springSmooth}
+              >
+                <button
+                  type="button"
+                  className="promo-modal-close"
+                  onClick={() => {
+                    setPromoModalOpen(false)
+                    setPromoStickerVisible(true)
+                  }}
+                  aria-label="Close special offer"
+                >
+                  &#10005;
+                </button>
+                <p className="promo-modal-kicker">{promoOffer.label}</p>
+                <div className="promo-modal-layout">
+                  <p className="promo-modal-value" aria-hidden="true">
+                    <span className="promo-modal-number">
+                      <Motion.span
+                        className="promo-digit"
+                        initial={reduceMotion ? { opacity: 1 } : { opacity: 0, x: -28, y: 14, rotate: -14, scale: 0.88 }}
+                        animate={reduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
+                        transition={reduceMotion ? { duration: 0 } : { ...promoDigitSpring, delay: 0.16 }}
+                      >
+                        3
+                      </Motion.span>
+                      <Motion.span
+                        className="promo-digit"
+                        initial={reduceMotion ? { opacity: 1 } : { opacity: 0, x: 28, y: -14, rotate: 14, scale: 0.88 }}
+                        animate={reduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
+                        transition={reduceMotion ? { duration: 0 } : { ...promoDigitSpring, delay: 0.48 }}
+                      >
+                        0
+                      </Motion.span>
+                    </span>
+                    <Motion.span
+                      className="promo-modal-off"
+                      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 10, filter: 'blur(2px)' }}
+                      animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      transition={reduceMotion ? { duration: 0 } : { duration: 0.62, ease: easing, delay: 0.86 }}
+                    >
+                      % OFF
+                    </Motion.span>
+                  </p>
+                  <div className="promo-modal-copy">
+                    <p className="promo-modal-headline">{promoOffer.headline}</p>
+                    <p className="promo-modal-subline">{promoOffer.subline}</p>
+                    <p className="promo-modal-detail">{promoOffer.detail}</p>
+                    <div className="promo-modal-tags" aria-label="Offer highlights">
+                      <span>No coupon needed</span>
+                      <span>First-time clients</span>
+                      <span>Limited-time offer</span>
+                    </div>
+                    <a className="promo-modal-cta" href="#contact" onClick={() => setPromoModalOpen(false)}>
+                      Get this offer
+                    </a>
+                  </div>
+                </div>
+              </Motion.div>
+            </Motion.aside>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {promoStickerVisible && !promoModalOpen && (
+            <Motion.button
+              type="button"
+              className="promo-sticker"
+              onClick={() => setPromoModalOpen(true)}
+              aria-label="Open special offer details"
+              initial={reduceMotion ? { opacity: 1 } : { opacity: 0, x: 14, scale: 0.95 }}
+              animate={reduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, scale: 1 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 10, scale: 0.96 }}
+              transition={reduceMotion ? { duration: 0 } : springSmooth}
+            >
+              <span className="promo-sticker-kicker">{promoOffer.label}</span>
+              <span className="promo-sticker-value" aria-hidden="true">
+                <strong>30</strong>
+                <em>% OFF</em>
+              </span>
+              <span className="promo-sticker-detail">First service</span>
+            </Motion.button>
+          )}
+        </AnimatePresence>
+
         <header className="hero" id="home" ref={heroRef}>
           <div className="hero-media" aria-hidden="true">
             <video
